@@ -1,6 +1,6 @@
 // in src/users.tsx
 import { useMediaQuery } from "@mui/material";
-import { List, SimpleList, Datagrid, TextField, EmailField } from "react-admin"
+import {List, SimpleList, Datagrid, TextField, EmailField, ImageField} from "react-admin"
 import MyUrlField from './MyUrlField';
 
 export const UserList = () => {
@@ -18,10 +18,10 @@ export const UserList = () => {
                 <Datagrid rowClick="edit">
                     <TextField source="id" />
                     <TextField source="name" />
+                    <ImageField source="avatar.url" src="avatar.url" title="avatar" />
                     <EmailField source="email" />
-                    <TextField source="phone" />
-                    <MyUrlField source="website" />
-                    <TextField source="company.name" />
+                    <TextField source="interests" />
+                    <TextField source="bio" />
                 </Datagrid>
             )}
         </List>
