@@ -8,7 +8,13 @@ const httpClient = fetchUtils.fetchJson;
 // TypeScript users must reference the type `DataProvider`
 export const dataProvider = {
     getList: (resource, params) => {
-        const url = `${apiUrl}/${resource}`;
+
+        const { page, perPage } = params.pagination;
+        console.log(page, perPage)
+        // const url = `${apiUrl}/${resource}?page=${page-1}&perPage=${perPage}`;
+        const url = `${apiUrl}/${resource}`
+
+        console.log(url)
         return httpClient(url).then(({ headers, json }) => ({
             data: json,
             total: 10,
@@ -19,25 +25,6 @@ export const dataProvider = {
         httpClient(`${apiUrl}/${resource}/${params.id}`).then(({ json }) => ({
             data: json,
         })),
-
-    getManyReference: (resource, params) => {
-        const { page, perPage } = params.pagination;
-        const { field, order } = params.sort;
-        const query = {
-            sort: JSON.stringify([field, order]),
-            range: JSON.stringify([(page - 1) * perPage, page * perPage - 1]),
-            filter: JSON.stringify({
-                ...params.filter,
-                [params.target]: params.id,
-            }),
-        };
-        const url = `${apiUrl}/${resource}?${stringify(query)}`;
-
-        return httpClient(url).then(({ headers, json }) => ({
-            data: json,
-            total: parseInt((headers.get('content-range') || "0").split('/').pop() || 0, 10),
-        }));
-    },
 
     update: (resource, params) =>
         httpClient(`${apiUrl}/${resource}/${params.id}`, {

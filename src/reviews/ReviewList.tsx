@@ -4,7 +4,7 @@ import {
     TextField,
     ReferenceField,
     TextInput,
-    ReferenceInput, ImageField
+    ReferenceInput, ImageField, EditButton
 } from "react-admin";
 
 const reviewFilters = [
@@ -21,6 +21,7 @@ const ReviewList = () => (
             <TextField source="stars" />
             <TextField source="content" />
             <TextField source="date" />
+            <EditButton />
         </Datagrid>
     </List>
 )
