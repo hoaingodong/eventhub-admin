@@ -1,13 +1,14 @@
-// in src/users.tsx
 import { useMediaQuery } from "@mui/material";
 import {List, SimpleList, Datagrid, TextField, EmailField, ImageField} from "react-admin"
-import MyUrlField from './MyUrlField';
+import { Pagination } from 'react-admin';
 
-export const UserList = () => {
+const PostPagination = () => <Pagination rowsPerPageOptions={[5, 10, 25, 50, 100]} />;
+
+const UserList = () => {
     // @ts-ignore
     const isSmall = useMediaQuery((theme) => theme.breakpoints.down("sm"));
     return (
-        <List>
+        <List pagination={<PostPagination />}>
             {isSmall ? (
                 <SimpleList
                     primaryText={(record) => record.name}
@@ -27,3 +28,5 @@ export const UserList = () => {
         </List>
     );
 };
+
+export default UserList

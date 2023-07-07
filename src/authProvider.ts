@@ -1,32 +1,47 @@
-// TypeScript users must reference the type: `AuthProvider`
-export const authProvider = {
-    // called when the user attempts to log in
-    // @ts-ignore
-    login: ({ username }) => {
-        localStorage.setItem("username", username);
-        // accept all username/password combinations
-        return Promise.resolve();
+// in src/authProvider.js
+const authProvider = {
+    login: ({ username, password }) =>  {
+        console.log(username, password)
+        const email = username
+        const request = new Request('https://event-booking-app.onrender.com/api/v1/me/login', {
+            method: 'POST',
+            body: JSON.stringify({ email, password }),
+            headers: new Headers({ 'Content-Type': 'application/json' }),
+        });
+        return fetch(request)
+            .then(response => {
+                if (response.status < 200 || response.status >= 300) {
+                    throw new Error(response.statusText);
+                }
+                return response.json();
+            })
+            .then(auth => {
+                localStorage.setItem('auth', JSON.stringify(auth));
+            })
+            .catch(() => {
+                throw new Error('Invalid username or password')
+            });
     },
-    // called when the user clicks on the logout button
     logout: () => {
-        localStorage.removeItem("username");
+        localStorage.removeItem('auth');
         return Promise.resolve();
     },
-    // called when the API returns an error
-    // @ts-ignore
-    checkError: ({ status }) => {
+    checkAuth: () =>
+        localStorage.getItem('auth') ? Promise.resolve() : Promise.reject(),
+    checkError:  (error) => {
+        const status = error.status;
         if (status === 401 || status === 403) {
-            localStorage.removeItem("username");
+            localStorage.removeItem('auth');
             return Promise.reject();
         }
+        // other error code (404, 500, etc): no need to log out
         return Promise.resolve();
     },
-    // called when the user navigates to a new location, to check for authentication
-    checkAuth: () => {
-        return localStorage.getItem("username")
-            ? Promise.resolve()
-            : Promise.reject();
-    },
-    // called when the user navigates to a new location, to check for permissions / roles
-    getPermissions: () => Promise.resolve(),
+    getIdentity: () =>
+        Promise.resolve({
+            id: 'user',
+            fullName: "My Hoai",
+        }),
+    getPermissions: () => Promise.resolve(''),
 };
+export default authProvider;
