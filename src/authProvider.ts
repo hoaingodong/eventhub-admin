@@ -1,12 +1,12 @@
 // in src/authProvider.js
 const authProvider = {
-    login: ({ username, password }) =>  {
+    login: ({username, password}) => {
         console.log(username, password)
         const email = username
         const request = new Request('https://event-booking-app.onrender.com/api/v1/me/login', {
             method: 'POST',
-            body: JSON.stringify({ email, password }),
-            headers: new Headers({ 'Content-Type': 'application/json' }),
+            body: JSON.stringify({email, password}),
+            headers: new Headers({'Content-Type': 'application/json'}),
         });
         return fetch(request)
             .then(response => {
@@ -28,7 +28,7 @@ const authProvider = {
     },
     checkAuth: () =>
         localStorage.getItem('auth') ? Promise.resolve() : Promise.reject(),
-    checkError:  (error) => {
+    checkError: (error) => {
         const status = error.status;
         if (status === 401 || status === 403) {
             localStorage.removeItem('auth');
@@ -38,10 +38,16 @@ const authProvider = {
         return Promise.resolve();
     },
     getIdentity: () =>
+    // {
+    //     let auth = localStorage.getItem('auth');
+    //     auth = JSON.parse(auth);
+    //     console.log(auth.user.name);
         Promise.resolve({
             id: 'user',
-            fullName: "My Hoai",
-        }),
+            fullName: 'Nguyen Thanh Lam',
+        })
+    // }
+    ,
     getPermissions: () => Promise.resolve(''),
 };
 export default authProvider;

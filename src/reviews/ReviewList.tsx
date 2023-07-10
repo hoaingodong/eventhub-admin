@@ -5,23 +5,22 @@ import {
     ReferenceField,
     TextInput,
     ReferenceInput, ImageField, EditButton
-} from "react-admin";
+} from "react-admin"
 
 const reviewFilters = [
-    <TextInput source="q" label="Search" alwaysOn />,
-    <ReferenceInput source="organizer" label="organizer" reference="users" />,
+    <TextInput source="q" label="Search" alwaysOn/>,
+    <ReferenceInput source="toUser" label="toUsers" reference="users"/>,
 ];
 
 const ReviewList = () => (
     <List filters={reviewFilters}>
         <Datagrid>
-            <TextField source="id" />
-            <ReferenceField source="fromUser" reference="users" />
-            <ReferenceField source="toUser" reference="users" />
-            <TextField source="stars" />
-            <TextField source="content" />
-            <TextField source="date" />
-            <EditButton />
+            <TextField source="id"/>
+            <ReferenceField source="toUser" reference="users"/>
+            <TextField source="stars"/>
+            <TextField source="content"/>
+            <TextField source="date"/>
+            <EditButton/>
         </Datagrid>
     </List>
 )

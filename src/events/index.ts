@@ -1,4 +1,4 @@
-import EventIcon from '@mui/icons-material/Bookmark';
+import EventIcon from '@mui/icons-material/EventAvailable';
 
 import EventList from "./EventList"
 import EventCreate from "./EventCreate"

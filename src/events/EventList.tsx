@@ -7,26 +7,26 @@ import {
     ReferenceInput,
     TextField,
     TextInput
-} from "react-admin";
+} from "react-admin"
 
 const eventFilters = [
-    <TextInput source="q" label="Search" alwaysOn />,
-    <ReferenceInput source="organizer" label="organizer" reference="users" />,
+    <TextInput source="q" label="Search" alwaysOn/>,
+    <ReferenceInput source="organizer" label="organizer" reference="users"/>,
 ];
 
 const EventList = () => (
     <List filters={eventFilters}>
         <Datagrid>
-            <TextField source="id" />
-            <ReferenceField source="organizer" reference="users" />
-            <TextField source="title" />
-            <ImageField source="image.url" src="image.url" title="avatar" />
-            <TextField source="price" />
-            <TextField source="topics" />
-            <TextField source="address" />
-            <TextField source="startDate" />
-            <TextField source="endDate" />
-            <EditButton />
+            <TextField source="id"/>
+            <ReferenceField source="organizer" reference="users"/>
+            <TextField source="title"/>
+            <ImageField source="image.url" src="image.url" title="avatar"/>
+            <TextField source="price"/>
+            <TextField source="topics"/>
+            <TextField source="address"/>
+            <TextField source="startDate"/>
+            <TextField source="endDate"/>
+            <EditButton/>
         </Datagrid>
     </List>
 );
