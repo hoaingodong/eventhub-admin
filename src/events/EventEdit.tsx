@@ -1,4 +1,7 @@
-import {Edit, ReferenceField, SimpleForm, TextInput, useRecordContext} from "react-admin"
+import {Edit, number, NumberInput, ReferenceField, required, SimpleForm, TextInput, useRecordContext} from "react-admin"
+
+const validateNumber = [number(), required()];
+const validateDate = [Date(), required()];
 
 const EventTitle = () => {
     const record = useRecordContext()
@@ -8,16 +11,16 @@ const EventTitle = () => {
 const EventEdit = () => (
     <Edit title={<EventTitle/>}>
         <SimpleForm>
-            <TextInput source="id" disabled/>
-            <ReferenceField source="organizer" reference="users"/>
-            <TextInput source="title" fullWidth/>
-            <TextInput source="price" fullWidth/>
-            <TextInput source="address" fullWidth/>
-            <TextInput source="startDate" fullWidth/>
-            <TextInput source="endDate" fullWidth/>
-            <TextInput source="location.coordinates.longitude" fullWidth/>
-            <TextInput source="location.coordinates.latitude" fullWidth/>
-            <TextInput source="introduction" multiline rows={5} fullWidth/>
+            <TextInput source="id" disabled validate={required()}/>
+            <ReferenceField source="organizer" reference="users" />
+            <TextInput source="title" fullWidth validate={required()}/>
+            <TextInput source="price" fullWidth validate={validateNumber} />
+            <TextInput source="address" fullWidth validate={required()}/>
+            <TextInput source="startDate" fullWidth validate={validateDate}/>
+            <TextInput source="endDate" fullWidth validate={validateDate}/>
+            <TextInput source="location.coordinates.longitude" fullWidth validate={validateNumber}/>
+            <TextInput source="location.coordinates.latitude" fullWidth validate={validateNumber}/>
+            <TextInput source="introduction" multiline rows={5} fullWidth validate={required()}/>
         </SimpleForm>
     </Edit>
 );
