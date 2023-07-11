@@ -3,6 +3,7 @@ import {
     number,
     NumberInput,
     ReferenceField,
+    ReferenceInput,
     required,
     SelectArrayInput,
     SimpleForm,
