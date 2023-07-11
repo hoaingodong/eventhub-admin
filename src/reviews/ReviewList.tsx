@@ -16,7 +16,6 @@ const ReviewList = () => (
     <List filters={reviewFilters}>
         <Datagrid>
             <TextField source="id"/>
-            <ReferenceField source="fromUser" reference="users"/>
             <ReferenceField source="toUser" reference="users"/>
             <TextField source="stars"/>
             <TextField source="content"/>
