@@ -44,7 +44,7 @@ export const dataProvider = {
         httpClient(`${apiUrl}/${resource}/${params.id}`, {
             method: "PUT",
             body: JSON.stringify(params.data),
-        }).then(({ json }) => ({ data: json })),
+        }).then(({ json }) => ({ data: {...params.data, id: json.id} })),
 
     create: (resource, params) =>
         // httpClient(`${apiUrl}/${resource}`, {
@@ -76,9 +76,31 @@ export const dataProvider = {
         }));
     },
 
+    getMany: (resource, params) => {
+        const getItem = (id) => {
+            const url = `${apiUrl}/${resource}/${id}`;
+            return httpClient(url).then(({ json }) => json);
+        };
+
+        const getItemPromises = params.ids.map((id) => getItem(id));
+
+        return Promise.all(getItemPromises)
+            .then((items) => ({ data: items }));
+    },
+
     delete: (resource, params) =>
         httpClient(`${apiUrl}/${resource}/${params.id}`, {
             method: "DELETE",
         }).then(({ json }) => ({ data: json })),
+
+    deleteMany: (resource, params) => {
+        const deleteItemPromises = params.ids.map((id) => {
+            const url = `${apiUrl}/${resource}/${id}`;
+            return httpClient(url, { method: 'DELETE' }).then(({ json }) => json);
+        });
+
+        return Promise.all(deleteItemPromises)
+            .then(() => ({ data: params.ids }));
+    },
 };
 
