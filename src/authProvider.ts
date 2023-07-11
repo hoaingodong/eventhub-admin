@@ -3,7 +3,7 @@ const authProvider = {
     login: ({username, password}) => {
         console.log(username, password)
         const email = username
-        const request = new Request('https://event-booking-app.onrender.com/api/v1/me/login', {
+        const request = new Request('https://event-booking-app.onrender.com/api/v1/me/login-admin', {
             method: 'POST',
             body: JSON.stringify({email, password}),
             headers: new Headers({'Content-Type': 'application/json'}),
@@ -34,20 +34,28 @@ const authProvider = {
             localStorage.removeItem('auth');
             return Promise.reject();
         }
-        // other error code (404, 500, etc): no need to log out
+
         return Promise.resolve();
     },
-    getIdentity: () =>
-    // {
-    //     let auth = localStorage.getItem('auth');
-    //     auth = JSON.parse(auth);
-    //     console.log(auth.user.name);
-        Promise.resolve({
+    getIdentity: () => {
+        let auth = localStorage.getItem('auth');
+            auth = JSON.parse(auth);
+
+        if (auth) {
+            const fullName = auth.user.name;
+            console.log(fullName)
+
+            return Promise.resolve({
+                id: 'user',
+                fullName: fullName,
+            });
+        }
+
+        return Promise.resolve({
             id: 'user',
-            fullName: 'Nguyen Thanh Lam',
-        })
-    // }
-    ,
+            fullName: 'Default Name',
+        });
+    },
     getPermissions: () => Promise.resolve(''),
 };
 export default authProvider;
