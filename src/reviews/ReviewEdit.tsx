@@ -19,8 +19,8 @@ const ReviewEdit = () => (
     <Edit title={<EventTitle/>}>
         <SimpleForm>
             <TextInput source="id" disabled/>
-            <ReferenceInput source="fromUser" reference="users" validate={required()}/>
-            <ReferenceInput source="toUser" reference="users" validate={required()}/>
+            <ReferenceInput source="fromUser" reference="users" validate={required()} disabled/>
+            <ReferenceInput source="toUser" reference="users" validate={required()} disabled/>
             <TextInput source="content" fullWidth validate={required()}/>
             <TextInput source="stars" fullWidth validate={validateStars}/>
             <TextInput source="date" fullWidth validate={validateDate}/>

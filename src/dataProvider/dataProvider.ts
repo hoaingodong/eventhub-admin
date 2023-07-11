@@ -47,46 +47,50 @@ export const dataProvider = {
         }).then(({ json }) => ({ data: {...params.data, id: json.id} })),
 
     create: (resource, params) =>
-        // httpClient(`${apiUrl}/${resource}`, {
-        //     method: 'POST',
-        //     body: JSON.stringify(params.data),
-        // }).then(({json}) => ({
-        //     data: {...params.data, id: json.id},
-        // })),
-    {
-        let formData = new FormData();
-        console.log(formData)
-        formData.append("files", params.data.files.rawFile);
-        formData.append("title", params.data.title);
-        formData.append("price", params.data.price);
-        formData.append("startDate", params.data.startDate);
-        formData.append("endDate", params.data.endDate);
-        formData.append("introduction", params.data.introduction);
-        formData.append("topics[]", params.data.topics);
-        formData.append("organizer", params.data.organizer);
-        formData.append("longitude", params.data.longitude);
-        formData.append("latitude", params.data.latitude);
-        formData.append("address", params.data.address);
+        httpClient(`${apiUrl}/${resource}`, {
+            method: 'POST',
+            body: JSON.stringify(params.data),
+        }).then(({json}) => ({
+            data: {...params.data, id: json.id},
+        })),
+    // {
+    //     let formData = new FormData();
+    //     console.log(formData)
+    //     formData.append("files", params.data.files.rawFile);
+    //     formData.append("title", params.data.title);
+    //     formData.append("price", params.data.price);
+    //     formData.append("startDate", params.data.startDate);
+    //     formData.append("endDate", params.data.endDate);
+    //     formData.append("introduction", params.data.introduction);
+    //     formData.append("topics[]", params.data.topics);
+    //     formData.append("organizer", params.data.organizer);
+    //     formData.append("longitude", params.data.longitude);
+    //     formData.append("latitude", params.data.latitude);
+    //     formData.append("address", params.data.address);
+    //
+    //     return httpClient(`${apiUrl}/${resource}`, {
+    //         method: "POST",
+    //         body: formData,
+    //     }).then(({ json }) => ({
+    //         data: { ...params.data, id: json.id },
+    //     }));
+    // },
+    //
 
-        return httpClient(`${apiUrl}/${resource}`, {
-            method: "POST",
-            body: formData,
-        }).then(({ json }) => ({
-            data: { ...params.data, id: json.id },
+    getMany: (resource, params) => {
+        const { ids } = params; // Assuming the IDs of the resources are provided in params.ids
+
+        // Create an array of promises for each ID
+        const promises = ids.map((id) =>
+            httpClient(`${apiUrl}/${resource}/${id}`).then(({ json }) => json)
+        );
+
+        // Use Promise.all to resolve all promises
+        return Promise.all(promises).then((responses) => ({
+            data: responses,
         }));
     },
 
-    getMany: (resource, params) => {
-        const getItem = (id) => {
-            const url = `${apiUrl}/${resource}/${id}`;
-            return httpClient(url).then(({ json }) => json);
-        };
-
-        const getItemPromises = params.ids.map((id) => getItem(id));
-
-        return Promise.all(getItemPromises)
-            .then((items) => ({ data: items }));
-    },
 
     delete: (resource, params) =>
         httpClient(`${apiUrl}/${resource}/${params.id}`, {
