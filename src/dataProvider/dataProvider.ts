@@ -46,17 +46,41 @@ export const dataProvider = {
       body: JSON.stringify(params.data),
     }).then(({ json }) => ({ data: { ...params.data, id: json.id } })),
 
-  create: (resource, params) =>
+  create: (resource, params) => {
+    const { data } = params;
 
-     httpClient(`${apiUrl}/${resource}`, {
-      method: "POST",
-      body: JSON.stringify(params.data),
-    }).then(({ json }) => ({
-      data: {...params.data, id: json.id },
-    })),
+    if (data instanceof FormData) {
+      // If the data is a FormData object, use it directly
+      return httpClient(`${apiUrl}/${resource}`, {
+        method: 'POST',
+        body: data,
+      })
+          .then(({ json }) => ({
+            data: { ...data.get('data'), id: json.id },
+          }))
+          .catch((error) => {
+            console.error('Error creating item:', error);
+            throw error;
+          });
+    } else {
+      // If the data is not a FormData object, stringify it as JSON
+      return httpClient(`${apiUrl}/${resource}`, {
+        method: 'POST',
+        body: JSON.stringify(data),
+      })
+          .then(({ json }) => ({
+            data: { ...data, id: json.id },
+          }))
+          .catch((error) => {
+            console.error('Error creating item:', error);
+            throw error;
+          });
+    }
+  },
+
 
   getMany: (resource, params) => {
-    const { ids } = params; 
+    const { ids } = params;
 
     const promises = ids.map((id) =>
       httpClient(`${apiUrl}/${resource}/${id}`).then(({ json }) => json)
